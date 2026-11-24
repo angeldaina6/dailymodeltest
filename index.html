@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookman University | Enter to Learn. Depart to Serve.</title>
+    <meta name="description" content="Official website of Cookman University in Daytona Beach, Florida. Discover undergraduate and graduate degree programs, admissions, campus life, and athletics.">
+    
+    <!-- Google Fonts: Playfair Display / Merriweather for Collegiate Serif & Inter for Clean Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Configuration for Collegiate Palette & Typography -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        maroon: {
+                            DEFAULT: '#7A0019',
+                            dark: '#580012',
+                            light: '#9E1B32',
+                            50: '#FDF2F4',
+                        },
+                        gold: {
+                            DEFAULT: '#D4AF37',
+                            dark: '#B59224',
+                            light: '#F3E5AB',
+                        },
+                        slate: {
+                            850: '#1A202C',
+                            900: '#0F172A',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'Playfair Display', 'Georgia', 'serif'],
+                        display: ['Playfair Display', 'Merriweather', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-sans text-slate-800 bg-white antialiased selection:bg-maroon selection:text-white">
+
+    <!-- Custom Notification Banner / Toast (Replaces alert()) -->
+    <div id="notification-toast" class="fixed bottom-5 right-5 z-50 hidden transform transition-all duration-300 translate-y-4 opacity-0 max-w-md bg-slate-900 text-white border-l-4 border-gold px-5 py-4 rounded-lg shadow-2xl flex items-start gap-3">
+        <svg class="w-6 h-6 text-gold shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <div class="flex-1">
+            <h4 id="toast-title" class="font-serif font-bold text-sm text-gold">University Notice</h4>
+            <p id="toast-message" class="text-xs text-slate-200 mt-1 leading-relaxed"></p>
+        </div>
+        <button onclick="hideNotification()" class="text-slate-400 hover:text-white p-1" aria-label="Close notification">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+    </div>
+
+    <!-- =====================================================================
+         1. TOP UTILITY BAR
+         ===================================================================== -->
+    <div class="bg-maroon-dark text-white text-xs border-b border-maroon-light/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between py-2 gap-2">
+            <!-- Left Info / Emergency or Campus Status -->
+            <div class="hidden md:flex items-center space-x-4 text-slate-200">
+                <span class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-gold animate-pulse"></span>
+                    <span>Fall &amp; Spring Admissions Open — Daytona Beach, FL</span>
+                </span>
+            </div>
+
+            <!-- Right Utility Links -->
+            <nav aria-label="Utility Navigation" class="flex items-center flex-wrap gap-x-4 sm:gap-x-6 gap-y-1 ml-auto font-medium tracking-wide">
+                <a href="#admissions" class="hover:text-gold transition-colors">Apply</a>
+                <a href="#visit" onclick="showNotification('Campus Tours', 'Daily guided walking tours depart from White Hall at 10:00 AM and 2:00 PM EST.'); return false;" class="hover:text-gold transition-colors">Visit</a>
+                <a href="#give" onclick="showNotification('Office of Institutional Advancement', 'Thank you for supporting student scholarships and the Cookman Annual Fund.'); return false;" class="hover:text-gold transition-colors">Give</a>
+                <a href="#alumni" onclick="showNotification('National Alumni Association', 'Welcome home, Wildcats! Explore upcoming Homecoming and regional chapter events.'); return false;" class="hover:text-gold transition-colors">Alumni</a>
+                <a href="#portal" onclick="openPortalModal()" class="inline-flex items-center gap-1.5 bg-gold text-slate-900 font-semibold px-3 py-1 rounded hover:bg-gold-light transition-colors shadow-sm">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    <span>MyCookman Portal</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- =====================================================================
+         MAIN NAVIGATION BAR
+         ===================================================================== -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Official University Crest & Wordmark -->
+                <a href="#" class="flex items-center gap-3.5 group focus:outline-none">
+                    <!-- Custom Vector Collegiate Crest SVG -->
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 shrink-0 transition-transform duration-300 group-hover:scale-105">
+                        <svg viewBox="0 0 100 115" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full drop-shadow">
+                            <!-- Outer Shield -->
+                            <path d="M50 4L92 18V56C92 84 72 102 50 111C28 102 8 84 8 56V18L50 4Z" fill="#7A0019" stroke="#D4AF37" stroke-width="4"/>
+                            <!-- Inner Shield Trim -->
+                            <path d="M50 11L85 23V55C85 79 68 95 50 103C32 95 15 79 15 55V23L50 11Z" stroke="#D4AF37" stroke-width="1.5" stroke-opacity="0.7"/>
+                            <!-- Open Book of Knowledge -->
+                            <path d="M28 46C35 43 44 44 50 48C56 44 65 43 72 46V64C65 61 56 62 50 66C44 62 35 61 28 64V46Z" fill="#FFFFFF" stroke="#D4AF37" stroke-width="1.5"/>
+                            <line x1="50" y1="48" x2="50" y2="66" stroke="#7A0019" stroke-width="1.5"/>
+                            <!-- Torch of Enlightenment -->
+                            <path d="M47 26H53L51.5 41H48.5L47 26Z" fill="#D4AF37"/>
+                            <path d="M50 15C53 19 55 22 50 25C45 22 47 19 50 15Z" fill="#F3E5AB"/>
+                            <!-- Founding Year Banner -->
+                            <text x="50" y="83" text-anchor="middle" fill="#D4AF37" font-family="Georgia, serif" font-weight="bold" font-size="12" letter-spacing="1.5">1904</text>
+                        </svg>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-display font-bold text-xl sm:text-2xl tracking-tight text-maroon leading-none">
+                            COOKMAN
+                        </span>
+                        <span class="font-serif text-xs sm:text-sm font-semibold tracking-[0.22em] text-slate-700 mt-1">
+                            UNIVERSITY
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation Links -->
+                <nav aria-label="Main Navigation" class="hidden lg:flex items-center space-x-7 text-sm font-semibold text-slate-800">
+                    <a href="#academics" class="hover:text-maroon py-2 border-b-2 border-transparent hover:border-gold transition-all">Academics</a>
+                    <a href="#admissions" class="hover:text-maroon py-2 border-b-2 border-transparent hover:border-gold transition-all">Admissions &amp; Aid</a>
+                    <a href="#campus-life" class="hover:text-maroon py-2 border-b-2 border-transparent hover:border-gold transition-all">Campus Life</a>
+                    <a href="#athletics" class="hover:text-maroon py-2 border-b-2 border-transparent hover:border-gold transition-all">Athletics</a>
+                    <a href="#research" class="hover:text-maroon py-2 border-b-2 border-transparent hover:border-gold transition-all">Research</a>
+                    <a href="#about" class="hover:text-maroon py-2 border-b-2 border-transparent hover:border-gold transition-all">About</a>
+                </nav>
+
+                <!-- Search & Mobile Menu Trigger -->
+                <div class="flex items-center gap-2">
+                    <button onclick="toggleSearchBar()" class="p-2.5 text-slate-600 hover:text-maroon hover:bg-maroon-50 rounded-full transition-colors" aria-label="Search site">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </button>
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="lg:hidden p-2.5 rounded-lg text-slate-700 hover:text-maroon hover:bg-maroon-50 transition-colors" aria-expanded="false" aria-label="Toggle Menu">
+                        <svg id="menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                        <svg id="menu-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expandable Search Bar -->
+        <div id="site-search-bar" class="hidden bg-slate-50 border-t border-slate-200 px-4 py-3">
+            <form onsubmit="handleSearch(event)" class="max-w-3xl mx-auto flex gap-2">
+                <input type="text" id="search-input" placeholder="Search majors, faculty directory, financial aid, or campus events..." class="w-full px-4 py-2 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-maroon focus:border-maroon">
+                <button type="submit" class="bg-maroon text-white text-sm font-semibold px-5 py-2 rounded-lg hover:bg-maroon-dark transition-colors">
+                    Search
+                </button>
+            </form>
+        </div>
+
+        <!-- Mobile Dropdown Navigation -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-slate-200 px-4 pt-3 pb-6 space-y-2 shadow-lg">
+            <a href="#academics" onclick="toggleMobileMenu()" class="block px-3 py-2.5 rounded-lg text-base font-semibold text-slate-800 hover:bg-maroon-50 hover:text-maroon">Academics</a>
+            <a href="#admissions" onclick="toggleMobileMenu()" class="block px-3 py-2.5 rounded-lg text-base font-semibold text-slate-800 hover:bg-maroon-50 hover:text-maroon">Admissions &amp; Aid</a>
+            <a href="#campus-life" onclick="toggleMobileMenu()" class="block px-3 py-2.5 rounded-lg text-base font-semibold text-slate-800 hover:bg-maroon-50 hover:text-maroon">Campus Life</a>
+            <a href="#athletics" onclick="toggleMobileMenu()" class="block px-3 py-2.5 rounded-lg text-base font-semibold text-slate-800 hover:bg-maroon-50 hover:text-maroon">Athletics</a>
+            <a href="#research" onclick="toggleMobileMenu()" class="block px-3 py-2.5 rounded-lg text-base font-semibold text-slate-800 hover:bg-maroon-50 hover:text-maroon">Research</a>
+            <a href="#about" onclick="toggleMobileMenu()" class="block px-3 py-2.5 rounded-lg text-base font-semibold text-slate-800 hover:bg-maroon-50 hover:text-maroon">About</a>
+            <div class="pt-3 border-t border-slate-200 flex flex-col sm:flex-row gap-2">
+                <a href="#admissions" onclick="toggleMobileMenu()" class="w-full text-center bg-maroon text-white font-semibold py-2.5 rounded-lg">Apply Now</a>
+                <button onclick="toggleMobileMenu(); openPortalModal();" class="w-full text-center bg-gold text-slate-900 font-semibold py-2.5 rounded-lg">MyCookman Portal</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- =====================================================================
+             2. HERO SECTION
+             ===================================================================== -->
+        <section class="relative bg-slate-900 text-white overflow-hidden">
+            <!-- Campus Background Image with Fallback -->
+            <div class="absolute inset-0 z-0">
+                <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1920&q=80" 
+                     onerror="this.onerror=null; this.src='https://placehold.co/1920x900/580012/D4AF37?text=Cookman+University+Historic+Campus';"
+                     alt="Cookman University Historic Campus Quad" 
+                     class="w-full h-full object-cover object-center opacity-45">
+                <!-- Collegiate Gradient Overlay -->
+                <div class="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-maroon-dark/80 to-slate-900/60"></div>
+            </div>
+
+            <!-- Hero Content Container -->
+            <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-36">
+                <div class="max-w-3xl">
+                    <!-- Institutional Motto Pill -->
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-gold/40 text-gold text-xs sm:text-sm font-semibold tracking-wider uppercase mb-6">
+                        <span>Founded 1904</span>
+                        <span>&bull;</span>
+                        <span>Daytona Beach, Florida</span>
+                    </div>
+
+                    <!-- Bold Collegiate Serif Headline -->
+                    <h1 class="font-display font-bold text-4xl sm:text-5xl lg:text-6xl text-white leading-tight tracking-tight">
+                        Enter to Learn. <br>
+                        <span class="text-gold">Depart to Serve.</span>
+                    </h1>
+
+                    <!-- Subheadline -->
+                    <p class="mt-6 text-base sm:text-lg lg:text-xl text-slate-200 leading-relaxed max-w-2xl font-light">
+                        For over 120 years, Cookman University has cultivated ethical leaders, groundbreaking scholars, and global citizens through rigorous academic inquiry and purposeful community service.
+                    </p>
+
+                    <!-- Primary & Secondary CTA Buttons -->
+                    <div class="mt-9 flex flex-col sm:flex-row gap-4">
+                        <a href="#admissions" class="inline-flex items-center justify-center px-7 py-4 rounded-lg bg-gold text-slate-950 font-bold text-base hover:bg-gold-light transition-all shadow-lg hover:shadow-gold/20">
+                            <span>Apply Now</span>
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </a>
+                        <a href="#academics" class="inline-flex items-center justify-center px-7 py-4 rounded-lg bg-white/10 backdrop-blur-sm text-white border border-white/30 font-semibold text-base hover:bg-white hover:text-maroon transition-all">
+                            Explore Programs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================================
+             3. QUICK STATS / FAST FACTS RIBBON
+             ===================================================================== -->
+        <section aria-label="University Fast Facts" class="bg-maroon text-white border-y-4 border-gold">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center divide-y sm:divide-y-0 sm:divide-x divide-maroon-light/50">
+                    <div class="pt-4 sm:pt-0">
+                        <div class="font-display font-bold text-3xl sm:text-4xl lg:text-5xl text-gold">120+</div>
+                        <div class="mt-2 text-xs sm:text-sm uppercase tracking-wider font-semibold text-slate-100">Years of Academic Legacy</div>
+                    </div>
+                    <div class="pt-4 sm:pt-0">
+                        <div class="font-display font-bold text-3xl sm:text-4xl lg:text-5xl text-gold">42</div>
+                        <div class="mt-2 text-xs sm:text-sm uppercase tracking-wider font-semibold text-slate-100">Undergraduate &amp; Graduate Degrees</div>
+                    </div>
+                    <div class="pt-4 sm:pt-0">
+                        <div class="font-display font-bold text-3xl sm:text-4xl lg:text-5xl text-gold">14:1</div>
+                        <div class="mt-2 text-xs sm:text-sm uppercase tracking-wider font-semibold text-slate-100">Student-to-Faculty Ratio</div>
+                    </div>
+                    <div class="pt-4 sm:pt-0">
+                        <div class="font-display font-bold text-3xl sm:text-4xl lg:text-5xl text-gold">94%</div>
+                        <div class="mt-2 text-xs sm:text-sm uppercase tracking-wider font-semibold text-slate-100">Career &amp; Grad School Placement</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================================
+             4. ACADEMIC PROGRAMS & SCHOOLS SHOWCASE
+             ===================================================================== -->
+        <section id="academics" class="py-20 bg-slate-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Section Header -->
+                <div class="text-center max-w-3xl mx-auto">
+                    <span class="text-maroon font-bold text-xs uppercase tracking-[0.2em]">Academic Excellence</span>
+                    <h2 class="mt-2 font-display font-bold text-3xl sm:text-4xl text-slate-900">
+                        Colleges &amp; Academic Schools
+                    </h2>
+                    <div class="w-20 h-1 bg-gold mx-auto mt-4 rounded-full"></div>
+                    <p class="mt-4 text-slate-600 text-base sm:text-lg">
+                        Explore accredited degree pathways designed to pair liberal arts foundations with hands-on professional mastery.
+                    </p>
+                </div>
+
+                <!-- Interactive Filter Tabs -->
+                <div role="tablist" aria-label="Filter Academic Colleges" class="mt-10 flex flex-wrap justify-center gap-2 sm:gap-3">
+                    <button onclick="filterPrograms('all')" data-filter="all" class="filter-btn active px-5 py-2.5 rounded-full text-sm font-semibold transition-all bg-maroon text-white shadow-sm">
+                        All Colleges
+                    </button>
+                    <button onclick="filterPrograms('arts-sciences')" data-filter="arts-sciences" class="filter-btn px-5 py-2.5 rounded-full text-sm font-semibold transition-all bg-white text-slate-700 border border-slate-300 hover:border-maroon hover:text-maroon">
+                        Arts &amp; Sciences
+                    </button>
+                    <button onclick="filterPrograms('business')" data-filter="business" class="filter-btn px-5 py-2.5 rounded-full text-sm font-semibold transition-all bg-white text-slate-700 border border-slate-300 hover:border-maroon hover:text-maroon">
+                        School of Business
+                    </button>
+                    <button onclick="filterPrograms('engineering')" data-filter="engineering" class="filter-btn px-5 py-2.5 rounded-full text-sm font-semibold transition-all bg-white text-slate-700 border border-slate-300 hover:border-maroon hover:text-maroon">
+                        Engineering &amp; Tech
+                    </button>
+                    <button onclick="filterPrograms('nursing')" data-filter="nursing" class="filter-btn px-5 py-2.5 rounded-full text-sm font-semibold transition-all bg-white text-slate-700 border border-slate-300 hover:border-maroon hover:text-maroon">
+                        Nursing &amp; Health
+                    </button>
+                </div>
+
+                <!-- College Cards Grid -->
+                <div id="programs-grid" class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <!-- Card 1: College of Arts & Sciences -->
+                    <article data-category="arts-sciences" class="program-card bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+                        <div class="h-52 overflow-hidden relative bg-slate-800">
+                            <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=900&q=80" 
+                                 onerror="this.onerror=null; this.src='https://placehold.co/900x500/7A0019/FFFFFF?text=College+of+Arts+%26+Sciences';"
+                                 alt="Students collaborating in College of Arts and Sciences" 
+                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                            <span class="absolute top-4 left-4 bg-maroon text-white text-xs font-bold uppercase tracking-wider px-3 py-1 rounded">
+                                Liberal Arts &amp; Humanities
+                            </span>
+                        </div>
+                        <div class="p-7 flex-1 flex flex-col">
+                            <h3 class="font-serif font-bold text-xl text-slate-900">College of Arts &amp; Sciences</h3>
+                            <p class="mt-3 text-slate-600 text-sm leading-relaxed">
+                                Fostering critical inquiry, ethical reasoning, and creative expression across the humanities, social sciences, and natural sciences.
+                            </p>
+                            <div class="mt-5 pt-4 border-t border-slate-100">
+                                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Featured Majors:</span>
+                                <div class="mt-2 flex flex-wrap gap-2">
+                                    <span class="text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium">Biology (B.S.)</span>
+                                    <span class="text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium">Political Science (B.A.)</span>
+                                    <span class="text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium">Criminal Justice (B.S.)</span>
+                                    <span class="text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium">Mass Communications</span>
+                                </div>
+                            </div>
+                            <div class="mt-6 pt-2">
+                                <button onclick="showNotification('College of Arts & Sciences', 'Requesting full curriculum guide for 16 undergraduate majors and pre-law tracks.')" class="inline-flex items-center text-maroon font-bold text-sm hover:text-maroon-dark group">
+                                    <span>View Department &amp; Degrees</span>
+                                    <svg class="w-4 h-4 ml-1.5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 2: School of Business -->
+                    <article data-category="business" class="program-card bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+                        <div class="h-52 overflow-hidden relative bg-slate-800">
+                            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=900&q=80" 
+                                 onerror="this.onerror=null; this.src='https://placehold.co/900x500/1E293B/D4AF37?text=School+of+Business';"
+                                 alt="Business students presenting financial strategy" 
+                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                            <span class="absolute top-4 left-4 bg-slate-900 text-gold text-xs font-bold uppercase tracking-wider px-3 py-1 rounded">
+                                AACSB Accredited
+                            </span>
+                        </div>
+                        <div class="p-7 flex-1 flex flex-col">
+                            <h3 class="font-serif font-bold text-xl text-slate-900">School of Business &amp; Entrepreneurship</h3>
+                            <p class="mt-3 text-slate-600 text-sm leading-relaxed">
+                                Preparing principled executives, financial analysts, and innovators for global enterprise through real-world corporate partnerships.
+                            </p>
+                            <div class="mt-5 pt-4 border-t border-slate-100">
+                                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Featured Majors:</span>
+                                <div class="mt-2 flex flex-wrap gap-2">
+                                    <span class="text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium">Accounting (B.S.)</span>
+                                    <span class="text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium">Finance &amp; Banking</span>
+                                    <span class="text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium">Hospitality Management</span>
+                                    <span class="text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium">Executive MBA</span>
+                                </div>
+                            </div>
+                            <div class="mt-6 pt-2">
+                                <button onclick="showNotification('School of Business', 'Explore our Bloomberg Finance Lab, Wall Street Fellowships, and MBA admissions.')" class="inline-flex items-center text-maroon font-bold text-sm hover:text-maroon-dark group">
+                                    <span>View Department &amp; Degrees</span>
+                                    <svg class="w-4 h-4 ml-1.5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 3: College of Engineering & Technology -->
+                    <article data-category="engineering" class="program-card bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+                        <div class="h-52 overflow-hidden relative bg-slate-800">
+                            <img src="https://images.unsplash.com/photo-1581092921461-eab62e97a780?auto=format&fit=crop&w=900&q=80" 
+                                 onerror="this.onerror=null; this.src='https://placehold.co/900x500/7A0019/D4AF37?text=Engineering+%26+Technology';"
+                                 alt="Engineering laboratory and robotics testing" 
+                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                            <span class="absolute top-4 left-4 bg-maroon text-white text-xs font-bold uppercase tracking-wider px-3 py-1 rounded">
+                                ABET Accredited
+                            </span>
+                        </div>
+                        <div class="p-7 flex-1 flex flex-col">
+                            <h3 class="font-serif font-bold text-xl text-slate-900">College of Engineering &amp; Technology</h3>
+                            <p class="mt-3 text-slate-600 text-sm leading-relaxed">
+                                Advancing resilient infrastructure, artificial intelligence, and aerospace systems on Florida's renowned Space Coast corridor.
+                            </p>
+                            <div class="mt-5 pt-4 border-t border-slate-100">
+                                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Featured Majors:</span>
+                                <div class="mt-2 flex flex-wrap gap-2">
+                                    <span class="text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium">Computer Science (B.S.)</span>
+                                    <span class="text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium">Computer Engineering</span>
+                                    <span class="text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium">Cybersecurity (M.S.)</span>
+                                    <span class="text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium">Environmental Science</span>
+                                </div>
+                            </div>
+                            <div class="mt-6 pt-2">
+                                <button onclick="showNotification('College of Engineering & Technology', 'Discover NASA research grants, Space Coast internships, and senior capstone labs.')" class="inline-flex items-center text-maroon font-bold text-sm hover:text-maroon-dark group">
+                                    <span>View Department &amp; Degrees</span>
+                                    <svg class="w-4 h-4 ml-1.5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 4: School of Nursing & Health Sciences -->
+                    <article data-category="nursing" class="program-card bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+                        <div class="h-52 overflow-hidden relative bg-slate-800">
+                            <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=900&q=80" 
+                                 onerror="this.onerror=null; this.src='https://placehold.co/900x500/0F172A/FFFFFF?text=School+of+Nursing+%26+Health+Sciences';"
+                                 alt="Clinical simulation lab in School of Nursing" 
+                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                            <span class="absolute top-4 left-4 bg-slate-900 text-gold text-xs font-bold uppercase tracking-wider px-3 py-1 rounded">
+                                CCNE Accredited
+                            </span>
+                        </div>
+                        <div class="p-7 flex-1 flex flex-col">
+                            <h3 class="font-serif font-bold text-xl text-slate-900">School of Nursing &amp; Health Sciences</h3>
+                            <p class="mt-3 text-slate-600 text-sm leading-relaxed">
+                                Training compassionate clinical practitioners and public health leaders in state-of-the-art simulation hospitals.
+                            </p>
+                            <div class="mt-5 pt-4 border-t border-slate-100">
+                                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Featured Majors:</span>
+                                <div class="mt-2 flex flex-wrap gap-2">
+                                    <span class="text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium">Nursing (B.S.N.)</span>
+                                    <span class="text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium">Public Health (B.S.)</span>
+                                    <span class="text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium">Health Administration</span>
+                                    <span class="text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded font-medium">Kinesiology</span>
+                                </div>
+                            </div>
+                            <div class="mt-6 pt-2">
+                                <button onclick="showNotification('School of Nursing & Health Sciences', '98% NCLEX-RN first-time pass rate. Explore clinical rotations with regional medical centers.')" class="inline-flex items-center text-maroon font-bold text-sm hover:text-maroon-dark group">
+                                    <span>View Department &amp; Degrees</span>
+                                    <svg class="w-4 h-4 ml-1.5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================================
+             CAMPUS LIFE, RESEARCH & ATHLETICS HIGHLIGHTS (Anchor Targets)
+             ===================================================================== -->
+        <section id="campus-life" class="py-16 bg-white border-t border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Campus Life Pillar -->
+                    <div class="p-8 rounded-xl bg-slate-50 border border-slate-200">
+                        <div class="w-12 h-12 rounded-lg bg-maroon/10 text-maroon flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </div>
+                        <h3 class="font-serif font-bold text-xl text-slate-900">Vibrant Campus Life</h3>
+                        <p class="mt-3 text-sm text-slate-600 leading-relaxed">
+                            Over 75 student organizations, Greek letter societies, the world-renowned Marching Wildcats band, and residential honors communities just minutes from the Atlantic coast.
+                        </p>
+                    </div>
+
+                    <!-- Research Pillar -->
+                    <div id="research" class="p-8 rounded-xl bg-slate-50 border border-slate-200">
+                        <div class="w-12 h-12 rounded-lg bg-maroon/10 text-maroon flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                        </div>
+                        <h3 class="font-serif font-bold text-xl text-slate-900">Research &amp; Innovation</h3>
+                        <p class="mt-3 text-sm text-slate-600 leading-relaxed">
+                            Undergraduate and faculty researchers collaborate on coastal sustainability, health equity, cybersecurity, and economic policy through federally funded institutes.
+                        </p>
+                    </div>
+
+                    <!-- Athletics Pillar -->
+                    <div id="athletics" class="p-8 rounded-xl bg-slate-50 border border-slate-200">
+                        <div class="w-12 h-12 rounded-lg bg-maroon/10 text-maroon flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                        </div>
+                        <h3 class="font-serif font-bold text-xl text-slate-900">NCAA Division I Athletics</h3>
+                        <p class="mt-3 text-sm text-slate-600 leading-relaxed">
+                            Home of the Cookman Wildcats competing in 17 varsity intercollegiate sports with championship spirit, academic integrity, and unmatched game-day tradition.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================================
+             5. CAMPUS NEWS & UPCOMING EVENTS SECTION
+             ===================================================================== -->
+        <section class="py-20 bg-slate-50 border-t border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                    
+                    <!-- Left 7 Columns: Official University News -->
+                    <div class="lg:col-span-7">
+                        <div class="flex items-end justify-between border-b border-slate-300 pb-4">
+                            <div>
+                                <span class="text-maroon font-bold text-xs uppercase tracking-[0.2em]">Press &amp; Announcements</span>
+                                <h2 class="mt-1 font-display font-bold text-2xl sm:text-3xl text-slate-900">University Newsroom</h2>
+                            </div>
+                            <a href="#newsroom" onclick="showNotification('Cookman Newsroom', 'Viewing official press releases and media advisories.'); return false;" class="text-sm font-semibold text-maroon hover:underline">
+                                All News &rarr;
+                            </a>
+                        </div>
+
+                        <div class="mt-8 space-y-6">
+                            <!-- Featured News Article -->
+                            <article class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow sm:flex">
+                                <div class="sm:w-2/5 h-48 sm:h-auto bg-slate-800 shrink-0">
+                                    <img src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=600&q=80" 
+                                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/7A0019/FFFFFF?text=Science+%26+Research+Center';"
+                                         alt="New Interdisciplinary Research Center" 
+                                         class="w-full h-full object-cover">
+                                </div>
+                                <div class="p-6 flex flex-col justify-between">
+                                    <div>
+                                        <div class="flex items-center gap-2 text-xs font-semibold text-maroon uppercase tracking-wider">
+                                            <span>Research &amp; Grants</span>
+                                            <span>&bull;</span>
+                                            <time datetime="2026-11-18" class="text-slate-500">November 18, 2026</time>
+                                        </div>
+                                        <h3 class="mt-2 font-serif font-bold text-lg text-slate-900 leading-snug">
+                                            Cookman University Awarded $4.8M Federal Grant for Coastal Resilience &amp; AI Lab
+                                        </h3>
+                                        <p class="mt-2 text-sm text-slate-600 line-clamp-2">
+                                            The five-year initiative will fund undergraduate research fellowships and advanced environmental modeling sensors along Florida's Atlantic shoreline.
+                                        </p>
+                                    </div>
+                                    <button onclick="showNotification('News Release', 'Full press release opened: $4.8M NSF Coastal Resilience & AI Lab Award.')" class="mt-4 text-left text-xs font-bold uppercase tracking-wider text-maroon hover:text-maroon-dark">
+                                        Read Full Release &rarr;
+                                    </button>
+                                </div>
+                            </article>
+
+                            <!-- Secondary News Items -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <article class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                                    <span class="text-xs font-semibold text-gold-dark uppercase tracking-wider">Academic Honors</span>
+                                    <h4 class="mt-2 font-serif font-bold text-base text-slate-900 leading-snug">
+                                        School of Nursing Celebrates 98% First-Time NCLEX-RN Pass Rate for Class of 2026
+                                    </h4>
+                                    <p class="mt-2 text-xs text-slate-500">November 10, 2026</p>
+                                </article>
+
+                                <article class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                                    <span class="text-xs font-semibold text-gold-dark uppercase tracking-wider">Institutional Milestone</span>
+                                    <h4 class="mt-2 font-serif font-bold text-base text-slate-900 leading-snug">
+                                        Board of Trustees Approves Historic Restoration of Faith Hall &amp; Chapel
+                                    </h4>
+                                    <p class="mt-2 text-xs text-slate-500">November 2, 2026</p>
+                                </article>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right 5 Columns: Academic Calendar & Upcoming Events -->
+                    <div class="lg:col-span-5">
+                        <div class="flex items-end justify-between border-b border-slate-300 pb-4">
+                            <div>
+                                <span class="text-maroon font-bold text-xs uppercase tracking-[0.2em]">Academic Calendar</span>
+                                <h2 class="mt-1 font-display font-bold text-2xl sm:text-3xl text-slate-900">Upcoming Events</h2>
+                            </div>
+                            <a href="#calendar" onclick="showNotification('Academic Calendar', 'Downloading 2026–2027 Official Academic & Registrar Calendar (PDF).'); return false;" class="text-sm font-semibold text-maroon hover:underline">
+                                Full Calendar &rarr;
+                            </a>
+                        </div>
+
+                        <div class="mt-8 bg-white rounded-xl border border-slate-200 divide-y divide-slate-100 shadow-sm">
+                            <!-- Event 1 -->
+                            <div class="p-5 flex items-start gap-4 hover:bg-slate-50 transition-colors">
+                                <div class="w-14 h-14 rounded-lg bg-maroon text-white flex flex-col items-center justify-center shrink-0 border-b-2 border-gold">
+                                    <span class="text-[10px] font-bold uppercase tracking-widest text-gold">DEC</span>
+                                    <span class="font-display font-bold text-xl leading-none mt-0.5">04</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-serif font-bold text-sm sm:text-base text-slate-900">Fall Undergraduate Research Symposium</h4>
+                                    <p class="text-xs text-slate-500 mt-1">9:00 AM – 4:00 PM &bull; Center for Civic Engagement</p>
+                                </div>
+                            </div>
+
+                            <!-- Event 2 -->
+                            <div class="p-5 flex items-start gap-4 hover:bg-slate-50 transition-colors">
+                                <div class="w-14 h-14 rounded-lg bg-maroon text-white flex flex-col items-center justify-center shrink-0 border-b-2 border-gold">
+                                    <span class="text-[10px] font-bold uppercase tracking-widest text-gold">DEC</span>
+                                    <span class="font-display font-bold text-xl leading-none mt-0.5">12</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-serif font-bold text-sm sm:text-base text-slate-900">Fall Commencement Convocation</h4>
+                                    <p class="text-xs text-slate-500 mt-1">10:00 AM &bull; Moore Gymnasium</p>
+                                </div>
+                            </div>
+
+                            <!-- Event 3 -->
+                            <div class="p-5 flex items-start gap-4 hover:bg-slate-50 transition-colors">
+                                <div class="w-14 h-14 rounded-lg bg-slate-900 text-white flex flex-col items-center justify-center shrink-0 border-b-2 border-gold">
+                                    <span class="text-[10px] font-bold uppercase tracking-widest text-gold">JAN</span>
+                                    <span class="font-display font-bold text-xl leading-none mt-0.5">11</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-serif font-bold text-sm sm:text-base text-slate-900">Spring Semester Classes Begin</h4>
+                                    <p class="text-xs text-slate-500 mt-1">All Academic Colleges &bull; Drop/Add Period Opens</p>
+                                </div>
+                            </div>
+
+                            <!-- Event 4 -->
+                            <div class="p-5 flex items-start gap-4 hover:bg-slate-50 transition-colors">
+                                <div class="w-14 h-14 rounded-lg bg-slate-900 text-white flex flex-col items-center justify-center shrink-0 border-b-2 border-gold">
+                                    <span class="text-[10px] font-bold uppercase tracking-widest text-gold">FEB</span>
+                                    <span class="font-display font-bold text-xl leading-none mt-0.5">06</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-serif font-bold text-sm sm:text-base text-slate-900">Founder's Day Convocation &amp; Open House</h4>
+                                    <p class="text-xs text-slate-500 mt-1">11:00 AM &bull; Performing Arts Center</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================================
+             6. ADMISSIONS & FINANCIAL AID CALLOUT BANNER
+             ===================================================================== -->
+        <section id="admissions" class="relative bg-maroon-dark text-white py-20 overflow-hidden">
+            <!-- Subtle Geometric Crest Watermark Pattern -->
+            <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#D4AF37 1px, transparent 1px); background-size: 24px 24px;"></div>
+
+            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-maroon border border-gold/40 rounded-2xl p-8 sm:p-12 lg:p-16 shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-10">
+                    <div class="max-w-2xl text-center lg:text-left">
+                        <span class="inline-block text-gold font-bold text-xs uppercase tracking-[0.2em] mb-3">
+                            Admissions &amp; Financial Aid
+                        </span>
+                        <h2 class="font-display font-bold text-3xl sm:text-4xl text-white leading-tight">
+                            Begin Your Journey as a Cookman Wildcat
+                        </h2>
+                        <p class="mt-4 text-slate-200 text-base sm:text-lg leading-relaxed">
+                            Over 88% of Cookman University students receive merit scholarships, institutional grants, or federal financial aid. Our admissions counselors are ready to guide you every step of the way.
+                        </p>
+                        <div class="mt-6 flex flex-wrap justify-center lg:justify-start gap-6 text-xs sm:text-sm text-gold-light font-medium">
+                            <span class="flex items-center gap-1.5">
+                                <svg class="w-4 h-4 text-gold" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                Rolling Admissions Decisions
+                            </span>
+                            <span class="flex items-center gap-1.5">
+                                <svg class="w-4 h-4 text-gold" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                Presidential Merit Scholarships
+                            </span>
+                            <span class="flex items-center gap-1.5">
+                                <svg class="w-4 h-4 text-gold" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                FAFSA Code: 001467
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col sm:flex-row lg:flex-col gap-4 w-full sm:w-auto shrink-0">
+                        <button onclick="openApplicationModal()" class="px-8 py-4 rounded-lg bg-gold text-slate-950 font-bold text-base hover:bg-gold-light transition-all shadow-lg text-center">
+                            Start Your Application
+                        </button>
+                        <button onclick="showNotification('Financial Aid Office', 'Schedule a 1-on-1 financial aid & scholarship consultation at finaid@cookman.edu or (386) 481-2600.')" class="px-8 py-4 rounded-lg bg-transparent border-2 border-white text-white font-semibold text-base hover:bg-white hover:text-maroon transition-all text-center">
+                            Explore Tuition &amp; Aid
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- =====================================================================
+         7. COMPREHENSIVE OFFICIAL UNIVERSITY FOOTER
+         ===================================================================== -->
+    <footer id="about" class="bg-slate-900 text-slate-300 border-t-4 border-gold">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12">
+                
+                <!-- University Identity, Address & Accreditation (5 Cols) -->
+                <div class="lg:col-span-5 space-y-5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 shrink-0">
+                            <svg viewBox="0 0 100 115" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+                                <path d="M50 4L92 18V56C92 84 72 102 50 111C28 102 8 84 8 56V18L50 4Z" fill="#7A0019" stroke="#D4AF37" stroke-width="4"/>
+                                <path d="M28 46C35 43 44 44 50 48C56 44 65 43 72 46V64C65 61 56 62 50 66C44 62 35 61 28 64V46Z" fill="#FFFFFF"/>
+                                <text x="50" y="85" text-anchor="middle" fill="#D4AF37" font-family="Georgia, serif" font-weight="bold" font-size="13">1904</text>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="font-display font-bold text-xl text-white tracking-tight">COOKMAN UNIVERSITY</div>
+                            <div class="text-xs text-gold tracking-widest uppercase">Enter to Learn. Depart to Serve.</div>
+                        </div>
+                    </div>
+
+                    <address class="not-italic text-sm text-slate-300 space-y-2 leading-relaxed">
+                        <p class="font-semibold text-white">Main Campus Address:</p>
+                        <p>640 Dr. Mary McLeod Bethune Blvd.<br>Daytona Beach, FL 32114-3099</p>
+                        <p class="pt-1">
+                            <span class="text-slate-400">Main Switchboard:</span> 
+                            <a href="tel:+13864812000" class="text-white hover:text-gold transition-colors">(386) 481-2000</a>
+                        </p>
+                        <p>
+                            <span class="text-slate-400">Admissions Office:</span> 
+                            <a href="mailto:admissions@cookman.edu" class="text-white hover:text-gold transition-colors">admissions@cookman.edu</a>
+                        </p>
+                    </address>
+
+                    <!-- Official Accreditation Badge -->
+                    <div class="p-4 rounded-lg bg-slate-800/80 border border-slate-700 flex items-start gap-3">
+                        <svg class="w-7 h-7 text-gold shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                        <div class="text-xs text-slate-300 leading-relaxed">
+                            <strong class="text-white block">SACSCOC Accredited Institution</strong>
+                            Cookman University is accredited by the Southern Association of Colleges and Schools Commission on Colleges to award baccalaureate and master's degrees.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Links Column 1: Academics & Admissions (2.5 Cols) -->
+                <div class="lg:col-span-2">
+                    <h4 class="font-serif font-bold text-sm uppercase tracking-wider text-gold mb-4">Academics</h4>
+                    <ul class="space-y-2.5 text-sm">
+                        <li><a href="#academics" class="hover:text-white transition-colors">Undergraduate Majors</a></li>
+                        <li><a href="#academics" class="hover:text-white transition-colors">Graduate Studies</a></li>
+                        <li><a href="#academics" class="hover:text-white transition-colors">Online Learning</a></li>
+                        <li><a href="#academics" class="hover:text-white transition-colors">Honors College</a></li>
+                        <li><a href="#research" class="hover:text-white transition-colors">Carl S. Swisher Library</a></li>
+                        <li><a href="#admissions" class="hover:text-white transition-colors">Office of the Registrar</a></li>
+                    </ul>
+                </div>
+
+                <!-- Quick Links Column 2: Campus & Resources (2.5 Cols) -->
+                <div class="lg:col-span-2">
+                    <h4 class="font-serif font-bold text-sm uppercase tracking-wider text-gold mb-4">Resources</h4>
+                    <ul class="space-y-2.5 text-sm">
+                        <li><button onclick="openPortalModal()" class="hover:text-white transition-colors text-left">MyCookman Portal</button></li>
+                        <li><a href="#campus-life" class="hover:text-white transition-colors">Campus Safety &amp; Police</a></li>
+                        <li><a href="#campus-life" class="hover:text-white transition-colors">Residence Life</a></li>
+                        <li><a href="#athletics" class="hover:text-white transition-colors">Wildcat Athletics</a></li>
+                        <li><a href="#about" class="hover:text-white transition-colors">Employment &amp; HR</a></li>
+                        <li><a href="#about" class="hover:text-white transition-colors">Campus Map &amp; Directions</a></li>
+                    </ul>
+                </div>
+
+                <!-- Quick Links Column 3: Connect & Consumer Info (3 Cols) -->
+                <div class="lg:col-span-3">
+                    <h4 class="font-serif font-bold text-sm uppercase tracking-wider text-gold mb-4">Institutional Governance</h4>
+                    <ul class="space-y-2.5 text-sm">
+                        <li><a href="#about" class="hover:text-white transition-colors">Office of the President</a></li>
+                        <li><a href="#about" class="hover:text-white transition-colors">Board of Trustees</a></li>
+                        <li><a href="#about" class="hover:text-white transition-colors">Title IX &amp; Equal Opportunity</a></li>
+                        <li><a href="#about" class="hover:text-white transition-colors">Consumer Information (HEOA)</a></li>
+                        <li><a href="#about" class="hover:text-white transition-colors">Accessibility Statement</a></li>
+                    </ul>
+
+                    <!-- Official Social Media Icons -->
+                    <div class="mt-6 flex items-center gap-3">
+                        <a href="#social-x" onclick="showNotification('Official Social Media', 'Connecting to @CookmanUniv official verified channel.'); return false;" aria-label="X / Twitter" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-maroon text-white flex items-center justify-center transition-colors">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <a href="#social-fb" onclick="showNotification('Official Social Media', 'Connecting to Cookman University Official Facebook Page.'); return false;" aria-label="Facebook" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-maroon text-white flex items-center justify-center transition-colors">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+                        </a>
+                        <a href="#social-ig" onclick="showNotification('Official Social Media', 'Connecting to @CookmanUniversity on Instagram.'); return false;" aria-label="Instagram" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-maroon text-white flex items-center justify-center transition-colors">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                        <a href="#social-li" onclick="showNotification('Official Social Media', 'Connecting to Cookman University on LinkedIn.'); return false;" aria-label="LinkedIn" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-maroon text-white flex items-center justify-center transition-colors">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Copyright & Legal Bar -->
+            <div class="mt-14 pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+                <p>&copy; 2026 Cookman University. All Rights Reserved. An Equal Opportunity / Affirmative Action Institution.</p>
+                <div class="flex flex-wrap gap-5">
+                    <a href="#privacy" onclick="showNotification('Privacy Policy', 'Cookman University adheres to FERPA and federal higher-education data privacy standards.'); return false;" class="hover:text-white">Privacy Policy</a>
+                    <a href="#terms" onclick="showNotification('Terms of Use', 'Official institutional web portal terms of service.'); return false;" class="hover:text-white">Terms of Use</a>
+                    <a href="#emergency" onclick="showNotification('Campus Safety', '24/7 Campus Emergency Dispatch: (386) 481-2900.'); return false;" class="hover:text-white">Emergency Info</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- =====================================================================
+         INTERACTIVE MODALS (MyCookman Portal & Quick Application Inquiry)
+         ===================================================================== -->
+    <!-- MyCookman Portal Modal -->
+    <div id="portal-modal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-2xl border border-slate-200">
+            <div class="bg-maroon px-6 py-5 flex items-center justify-between border-b-2 border-gold">
+                <div>
+                    <h3 class="font-display font-bold text-lg text-white">MyCookman Single Sign-On</h3>
+                    <p class="text-xs text-gold-light">Students, Faculty &amp; Staff Portal</p>
+                </div>
+                <button onclick="closePortalModal()" class="text-white/80 hover:text-white p-1" aria-label="Close modal">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <form onsubmit="handlePortalLogin(event)" class="p-6 space-y-4">
+                <div>
+                    <label for="cu-email" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">University Email (@cookman.edu)</label>
+                    <input type="email" id="cu-email" required placeholder="firstname.lastname@cookman.edu" class="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-maroon">
+                </div>
+                <div>
+                    <label for="cu-pass" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Wildcat Passphrase</label>
+                    <input type="password" id="cu-pass" required placeholder="••••••••••••" class="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-maroon">
+                </div>
+                <button type="submit" class="w-full bg-maroon text-white font-bold py-3 rounded-lg hover:bg-maroon-dark transition-colors">
+                    Sign In to MyCookman
+                </button>
+                <p class="text-center text-xs text-slate-500">
+                    Need IT Help Desk assistance? Call <span class="font-semibold text-slate-700">(386) 481-2090</span>.
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admissions Inquiry Modal -->
+    <div id="application-modal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border border-slate-200">
+            <div class="bg-slate-900 px-6 py-5 flex items-center justify-between border-b-2 border-gold">
+                <div>
+                    <h3 class="font-display font-bold text-lg text-white">Undergraduate &amp; Graduate Application</h3>
+                    <p class="text-xs text-gold">Office of Admissions &bull; cookman.edu</p>
+                </div>
+                <button onclick="closeApplicationModal()" class="text-white/80 hover:text-white p-1" aria-label="Close modal">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <form onsubmit="handleApplicationSubmit(event)" class="p-6 space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">First Name</label>
+                        <input type="text" required placeholder="Jordan" class="w-full px-3.5 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-maroon">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Last Name</label>
+                        <input type="text" required placeholder="Taylor" class="w-full px-3.5 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-maroon">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Email Address</label>
+                    <input type="email" required placeholder="jordan.taylor@example.com" class="w-full px-3.5 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-maroon">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Intended Academic College</label>
+                    <select class="w-full px-3.5 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-maroon bg-white">
+                        <option>College of Arts &amp; Sciences</option>
+                        <option>School of Business &amp; Entrepreneurship</option>
+                        <option>College of Engineering &amp; Technology</option>
+                        <option>School of Nursing &amp; Health Sciences</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-gold text-slate-950 font-bold py-3 rounded-lg hover:bg-gold-light transition-colors shadow">
+                    Create Admissions Account
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- =====================================================================
+         VANILLA JAVASCRIPT INTERACTIVITY
+         ===================================================================== -->
+    <script>
+        // 1. Mobile Navigation Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const openIcon = document.getElementById('menu-icon-open');
+            const closeIcon = document.getElementById('menu-icon-close');
+            const btn = document.getElementById('mobile-menu-btn');
+
+            const isHidden = menu.classList.contains('hidden');
+            if (isHidden) {
+                menu.classList.remove('hidden');
+                openIcon.classList.add('hidden');
+                closeIcon.classList.remove('hidden');
+                btn.setAttribute('aria-expanded', 'true');
+            } else {
+                menu.classList.add('hidden');
+                openIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+                btn.setAttribute('aria-expanded', 'false');
+            }
+        }
+
+        // 2. Site Search Bar Toggle & Submission
+        function toggleSearchBar() {
+            const searchBar = document.getElementById('site-search-bar');
+            const input = document.getElementById('search-input');
+            searchBar.classList.toggle('hidden');
+            if (!searchBar.classList.contains('hidden')) {
+                input.focus();
+            }
+        }
+
+        function handleSearch(event) {
+            event.preventDefault();
+            const query = document.getElementById('search-input').value.trim();
+            if (query) {
+                showNotification('University Directory & Catalog Search', `Showing academic and campus results for "${query}".`);
+                document.getElementById('site-search-bar').classList.add('hidden');
+            }
+        }
+
+        // 3. Interactive Academic College Filter
+        function filterPrograms(category) {
+            const cards = document.querySelectorAll('.program-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+
+            // Update button styling
+            buttons.forEach(btn => {
+                if (btn.dataset.filter === category) {
+                    btn.classList.remove('bg-white', 'text-slate-700', 'border', 'border-slate-300');
+                    btn.classList.add('bg-maroon', 'text-white', 'shadow-sm');
+                } else {
+                    btn.classList.remove('bg-maroon', 'text-white', 'shadow-sm');
+                    btn.classList.add('bg-white', 'text-slate-700', 'border', 'border-slate-300');
+                }
+            });
+
+            // Filter cards smoothly
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        // 4. Custom Toast Notification System
+        let toastTimeout;
+        function showNotification(title, message) {
+            const toast = document.getElementById('notification-toast');
+            document.getElementById('toast-title').textContent = title;
+            document.getElementById('toast-message').textContent = message;
+
+            toast.classList.remove('hidden');
+            // Trigger animation frame
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-4', 'opacity-0');
+            });
+
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(hideNotification, 5500);
+        }
+
+        function hideNotification() {
+            const toast = document.getElementById('notification-toast');
+            toast.classList.add('translate-y-4', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 300);
+        }
+
+        // 5. Portal & Application Modals
+        function openPortalModal() {
+            document.getElementById('portal-modal').classList.remove('hidden');
+        }
+        function closePortalModal() {
+            document.getElementById('portal-modal').classList.add('hidden');
+        }
+        function handlePortalLogin(event) {
+            event.preventDefault();
+            closePortalModal();
+            showNotification('MyCookman SSO', 'Authenticating credentials via Cookman University Identity Provider...');
+        }
+
+        function openApplicationModal() {
+            document.getElementById('application-modal').classList.remove('hidden');
+        }
+        function closeApplicationModal() {
+            document.getElementById('application-modal').classList.add('hidden');
+        }
+        function handleApplicationSubmit(event) {
+            event.preventDefault();
+            closeApplicationModal();
+            showNotification('Admissions Portal', 'Your Wildcat Admissions profile has been initialized. Check your email for next steps.');
+        }
+
+        // Close modals on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closePortalModal();
+                closeApplicationModal();
+            }
+        });
+    </script>
+</body>
+</html>
